@@ -34,12 +34,14 @@ from io import BytesIO
 
 import pdb
 
+import cv2
+
 app_directory = os.path.dirname(os.path.abspath(__file__))
 LANDMARK_FILE = os.path.join(app_directory,'files/shape_predictor_68_face_landmarks.dat')
-
+imagesFromClient =[]
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render('public/index.html')
+        self.render('public/main.html')
 
 class SocketHandler(websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
@@ -80,65 +82,68 @@ class SocketHandler(websocket.WebSocketHandler):
         self.image = ""
         
         self.max_time = 0 
-
+        self.imgArray = []
+        self.outputs={}
     def on_message(self, data):
+        if data == '2':
+            print("veriler alındı")
+            out = cv2.VideoWriter(r'C:/Users/eness/Desktop/project.avi',cv2.VideoWriter_fourcc(*'DIVX'), 60, (320,240))
+            for i in range(len(self.imgArray)):
+                out.write(self.imgArray[i])
+            out.release()
+            return
         if data == '1':
             self.write_message("1")
             return 
-
         msg = json.loads(data)
         image_str = msg['image']
-        date = msg['timestamp']
+        
+        image = Image.open(StringIO.BytesIO(base64.b64decode(image_str.encode('ascii'))))
+        #image.show("tmp2.png")
+        frame = np.array(image)
+        opencvImage = frame[:, :, ::-1].copy()
+        self.imgArray.append(opencvImage)
+        
+        # Swap red and blue channel
+        red = frame[:,:,0]
+        blue = frame[:,:,2]
+        frame[:,:,0] = blue
+        frame[:,:,2] = red
 
-        if date > self.max_time:
-            image = Image.open(StringIO.BytesIO(base64.b64decode(image_str.encode('ascii'))))
-            #image.save('tmp.png','PNG')
-
-            frame = np.array(image)
-
-            # Swap red and blue channel
-            red = frame[:,:,0]
-            blue = frame[:,:,2]
-            frame[:,:,0] = blue
-            frame[:,:,2] = red
+        frame_old = self.stream_processor.draw_shapes(frame.copy())
+        # print(base64.b64encode(frame_old))
+        pose_old, is_new = self.stream_processor.get_last_pose()
+        if pose_old is not None and is_new:
+            # print(pose_old)
+            self.rvec, self.tvec = post_process(pose_old[0],pose_old[1],self.aT,self.bT,self.aR,self.bR)
+            # print(self.tvec)
+            self.found = True
+            #print(self.rvec)
+            self.image = image_str #message
+            image_str_new = image_str
+        else:
+            blur = cv2.blur(np.array(image),(15,15))
+            image_str_new = array2string(blur)
+            self.found = False
+        posSizRot={
+            'position':{ 'x': float(self.tvec[0]), 'y': float(self.tvec[1]), 'z': float(self.tvec[2]) }
+            ,'rotation':{ 'x': float(self.rvec[0]), 'y': float(self.rvec[1]), 'z': float(self.rvec[2])}
+            ,'size':{ 'x':120*700/self.tvec[2] }
+            #,'image':"data:image/jpeg;base64,"+image_str_new
+            ,'speed':self.speed
+            ,'state':self.found
+        }        
+        print(posSizRot)
+        #print "After count update"
+        self.write_message(json.dumps(posSizRot))
+        self.now = time()
     
-            frame_old = self.stream_processor.draw_shapes(frame.copy())
-            # print(base64.b64encode(frame_old))
-            pose_old, is_new = self.stream_processor.get_last_pose()
-
-            if pose_old is not None and is_new:
-                # print(pose_old)
-                self.rvec, self.tvec = post_process(pose_old[0],pose_old[1],self.aT,self.bT,self.aR,self.bR)
-                # print(self.tvec)
-                self.found = True
-                #print(self.rvec)
-                self.image = image_str #message
-                image_str_new = image_str
-            else:
-                blur = cv2.blur(np.array(image),(15,15))
-                image_str_new = array2string(blur)
-                self.found = False
-
-            posSizRot={
-                'position':{ 'x': float(self.tvec[0]), 'y': float(self.tvec[1]), 'z': float(self.tvec[2]) }
-                ,'rotation':{ 'x': float(self.rvec[0]), 'y': float(self.rvec[1]), 'z': float(self.rvec[2])}
-                ,'size':{ 'x':120*700/self.tvec[2] }
-                ,'image':"data:image/jpeg;base64,"+image_str_new
-                ,'speed':self.speed
-                ,'state':self.found
-                ,"timestamp":date
-            }        
-        
-            #print "After count update"
-            self.write_message(json.dumps(posSizRot))
-            self.now = time()
-        
-            rate1,rate5,rate10 = self._fps.tick()
-            self.speed = rate1
-        
-            # Print object ID and the framerate.
-            text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), rate1 , rate5 , rate10 )
-            print( text)
+        rate1,rate5,rate10 = self._fps.tick()
+        self.speed = rate1
+    
+        # Print object ID and the framerate.
+        #text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), rate1 , rate5 , rate10 )
+        #print( text)
 
 
 def post_process(rvecInc,tvecInc,aT,bT,aR,bR):
@@ -177,6 +182,6 @@ handlers = [
 tornado_app = web.Application(handlers)
 
 if __name__ == '__main__':
-    tornado_app.listen(8082)
+    tornado_app.listen(8091)
     ioloop.IOLoop.instance().start()
 

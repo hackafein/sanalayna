@@ -69,31 +69,31 @@ var TryOnFace = function (params) {
     };
     
     this.start = function() {
-	var vid = document.getElementById('camera-fake');
-	
-	var errorElement = document.querySelector('#errorMsg');
-	
-	// Put variables in global scope to make them available to the browser console.
-	var constraints = window.constraints = {
-	    audio: false,
-	    video: true
-	};
-	
-	function handleSuccess(stream) {
-	    vid.srcObject = stream;
-	    vid.play();
-	}
-	
-	function handleError(error) {
-	    ref.changeStatus('STATUS_CAMERA_ERROR');
-	}
-	
-	navigator.mediaDevices.getUserMedia(constraints).
-	    then(handleSuccess).catch(handleError);
-	
-	
-	//continue in loop
-	ref.rotation.x = 0;
+			var vid = document.getElementById('camera-fake');
+			
+			var errorElement = document.querySelector('#errorMsg');
+			
+			// Put variables in global scope to make them available to the browser console.
+			var constraints = window.constraints = {
+					audio: false,
+					video: true
+			};
+			
+			function handleSuccess(stream) {
+					vid.srcObject = stream;
+					vid.play();
+			}
+			
+			function handleError(error) {
+					ref.changeStatus('STATUS_CAMERA_ERROR');
+			}
+			
+			navigator.mediaDevices.getUserMedia(constraints).
+					then(handleSuccess).catch(handleError);
+			
+			
+			//continue in loop
+			ref.rotation.x = 0;
     };
     
     
@@ -116,10 +116,13 @@ var TryOnFace = function (params) {
 	requestAnimFrame(ref.loop);
 	if(ref.data)
 	{
+			console.log("momentum:",ref.momentum);
+			console.log("1-momentum:",(1-ref.momentum));
 	    ref.position.x = ref.position.x*(1-ref.momentum)+ref.momentum*ref.data.position.x;
 	    ref.position.y = ref.position.y*(1-ref.momentum)+ref.momentum*ref.data.position.y;
 	    ref.position.z = ref.position.z*(1-ref.momentum)+ref.momentum*ref.data.position.z;
             ref.size.x = ref.data.size.x;
+						console.log("REF SIZE İXXXXXX: ",ref.size.x);
 	    ref.rotation.z = (1-ref.momentum)*ref.rotation.z+ref.momentum*ref.data.rotation.z;
 	    ref.rotation.y = (1-ref.momentum)*ref.rotation.y+ref.momentum*ref.data.rotation.y;
 	    ref.rotation.x = (1-ref.momentum)*ref.rotation.x+ref.momentum*ref.data.rotation.x;
