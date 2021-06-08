@@ -279,15 +279,15 @@
                             object.rotation.y =rotation["y"];
                             object.rotation.z =rotation["z"];
                             //object.rotation.z = (THREE.Math.degToRad(rotation["z"]))*-1;
-                            object.position.x =position["x"];
+                            object.position.x =position["x"]+5;
                             object.position.y =position["y"];
                             object.position.z =position["z"];
 
                             //console.log("size: ",size["x"]);
                             //console.log("size/1.8: ",size["x"]/1.8);
-                            object.scale.x = size["x"]/1.8;
-	                        object.scale.y = size["x"]/1.8;
-	                        object.scale.z = size["x"]/-1.8;
+                            object.scale.x = size["x"]/3.2;
+	                        object.scale.y = size["x"]/3.2;
+	                        object.scale.z = size["x"]/-3.2;
 
                             positions.splice(0, 1);
                             rotations.splice(0, 1);

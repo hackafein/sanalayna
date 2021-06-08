@@ -359,9 +359,9 @@ var TryOnFace = function (params) {
 	    //cube.scale.z = this.size.x;
 	    //cube.eulerOrder = this.order
 
-	    objex.scale.x = this.size.x/1.8;
-	    objex.scale.y = this.size.x/1.8;
-	    objex.scale.z = this.size.x/-1.8;
+	    objex.scale.x = this.size.x/20;
+	    objex.scale.y = this.size.x/20;
+	    objex.scale.z = this.size.x/-20;
 	    objex.rotation.order = this.order;
 		
 

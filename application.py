@@ -87,10 +87,10 @@ class SocketHandler(websocket.WebSocketHandler):
     def on_message(self, data):
         if data == '2':
             print("veriler alındı")
-            out = cv2.VideoWriter(r'C:/Users/eness/Desktop/project.avi',cv2.VideoWriter_fourcc(*'DIVX'), 60, (320,240))
-            for i in range(len(self.imgArray)):
-                out.write(self.imgArray[i])
-            out.release()
+            #out = cv2.VideoWriter(r'C:/Users/eness/Desktop/project.avi',cv2.VideoWriter_fourcc(*'DIVX'), 60, (320,240))
+            #for i in range(len(self.imgArray)):
+            #    out.write(self.imgArray[i])
+            #out.release()
             return
         if data == '1':
             self.write_message("1")
