@@ -26,7 +26,7 @@ import json
 from imutils import face_utils
 import dlib
 
-import  cv2
+#import  cv2
 from time import time
 
 import base64
@@ -34,7 +34,7 @@ from io import BytesIO
 
 import pdb
 
-import cv2
+#import cv2
 
 app_directory = os.path.dirname(os.path.abspath(__file__))
 LANDMARK_FILE = os.path.join(app_directory,'files/shape_predictor_68_face_landmarks.dat')
@@ -122,8 +122,9 @@ class SocketHandler(websocket.WebSocketHandler):
             self.image = image_str #message
             image_str_new = image_str
         else:
-            blur = cv2.blur(np.array(image),(15,15))
-            image_str_new = array2string(blur)
+            #blur = cv2.blur(np.array(image),(15,15))
+            #image_str_new = array2string(blur)
+            image_str_new=array2string(np.array(image))
             self.found = False
         posSizRot={
             'position':{ 'x': float(self.tvec[0]), 'y': float(self.tvec[1]), 'z': float(self.tvec[2]) }
