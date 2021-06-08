@@ -16,6 +16,9 @@ from PIL import Image
 # Import 3rd-party modules.
 from head_pose_estimation import PnpHeadPoseEstimator
 from tornado import websocket, web, ioloop, wsgi
+import tornado.options 
+from tornado.options import define, options
+define("port", default=5000, help="run on the given port", type=int)
 import numpy as np
 import coils
 from stream_pose import StreamProcessor
@@ -164,22 +167,24 @@ def array2string(img):
 # Retrieve command line arguments.
 
 
+
 public_root = os.path.join(os.path.dirname(__file__), 'public')
-
-settings = dict(
-  debug=True,
-  template_path=public_root
-)
-
-handlers = [
-    (r'/', IndexHandler),
-    (r'/ws', SocketHandler),
-    (r'/(.*)', web.StaticFileHandler, {'path': public_root})
-    ]
-
-tornado_app = web.Application(handlers)
-
 if __name__ == '__main__':
-    tornado_app.listen(8091)
+    tornado.options.parse_command_line() 
+    app = tornado.web.Application(
+    settings = dict(
+    debug=True,
+    template_path=public_root
+    ),
+
+    handlers = [
+        (r'/', IndexHandler),
+        (r'/ws', SocketHandler),
+        (r'/(.*)', web.StaticFileHandler, {'path': public_root})
+        ]
+        )
+    # set debug to False when running on production/Heroku!
+    http_server = tornado.httpserver.HTTPServer(app)
+    app.listen(options.port)
     ioloop.IOLoop.instance().start()
 
