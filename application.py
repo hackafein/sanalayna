@@ -167,24 +167,22 @@ def array2string(img):
 # Retrieve command line arguments.
 
 
-
 public_root = os.path.join(os.path.dirname(__file__), 'public')
-if __name__ == '__main__':
-    tornado.options.parse_command_line() 
-    app = tornado.web.Application(
-    settings = dict(
-    debug=True,
-    template_path=public_root
-    ),
 
-    handlers = [
-        (r'/', IndexHandler),
-        (r'/ws', SocketHandler),
-        (r'/(.*)', web.StaticFileHandler, {'path': public_root})
-        ]
-        )
-    # set debug to False when running on production/Heroku!
-    http_server = tornado.httpserver.HTTPServer(app)
-    app.listen(options.port)
+settings = dict(
+  debug=True,
+  template_path=public_root
+)
+
+handlers = [
+    (r'/', IndexHandler),
+    (r'/ws', SocketHandler),
+    (r'/(.*)', web.StaticFileHandler, {'path': public_root})
+    ]
+
+tornado_app = web.Application(handlers)
+
+if __name__ == '__main__':
+    tornado_app.listen(options.port)
     ioloop.IOLoop.instance().start()
 
