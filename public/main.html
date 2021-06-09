@@ -217,7 +217,7 @@
                 if(recordForMiliseconds > 0){
                   ctx.drawImage(frontCamera,0,0,frameSizes.width, frameSizes.height);
                   //recordedFrames.push(ctx.getImageData(0, 0, frameSizes.width, frameSizes.height));
-                  this.mediumQuality = frontCameraCanvas.toDataURL('image/jpeg', 0.3)
+                  this.mediumQuality = frontCameraCanvas.toDataURL('image/jpeg', 0.9)
                   
                   this.image = mediumQuality.split(',')[1];
                   message = JSON.stringify(

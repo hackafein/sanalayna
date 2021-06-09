@@ -49,7 +49,8 @@ class StreamProcessor(object):
         self.pose = None
         self.pose_smooth = None
         self.is_new = True
-
+        self.history_shape=[0,0]
+        self.history_rvec=[0,0]
     def find_stable_pose(self, frame):
         now = time()
         self.last = now
@@ -67,7 +68,7 @@ class StreamProcessor(object):
             # loop over the face detections
             if len(rects)==0:
                 self.is_new = False
-
+            val=0
             for rect in rects[:1]:
                 # determine the facial landmarks for the face region, then
                 # convert the facial landmark (x, y)-coordinates to a NumPy
@@ -78,6 +79,15 @@ class StreamProcessor(object):
                 
                 print( "Face found")
                 self.shape = self.shape*0.+shapeInc*1.
+                if self.shape is not None and type(self.shape) is not int:
+                    sayac=0
+                    for (x, y) in self.shape:
+                        if val >0:
+                            if abs(float(x)-float(self.history_shape[sayac][0]))<3:
+                                self.shape[sayac]=self.history_shape[sayac]
+                                sayac+=1
+                history_shape=self.shape
+               
                 """
                 shapeInc = self.predictor(gray, rect)
                 shapeInc = face_utils.shape_to_np(shapeInc)
@@ -109,13 +119,28 @@ class StreamProcessor(object):
 
                 tvecCent[2] = tvec[2]
 
-                print(self.tvec)
+                #print(self.tvec)
                 #print(self.tvec*0.5 + tvecCent*0.5)
 
                 #self.tvec = self.tvec*0.5 + tvecCent*0.5
 
                 rvecInc = pose.get_rotation_euler_angles()
                 self.rvec = rvecInc
+                
+                if self.rvec is not None and type(self.rvec) is not int:
+                    sayac=0
+                    for (z) in self.rvec:
+                        if val >0:
+                            if abs(float(self.rvec[sayac][3])-float(self.history_rvec[sayac][3]))<0.1:
+                                self.rvec[sayac][3]=self.history_rvec[sayac][3]
+                                
+                            if abs(float(self.rvec[sayac][2])-float(self.history_rvec[sayac][2]))<0.01:
+                                self.rvec[sayac][2]=self.history_rvec[sayac][2]
+                            if abs(float(self.rvec[sayac][1])-float(self.history_rvec[sayac][1]))<0.01:
+                                self.rvec[sayac][1]=self.history_rvec[sayac][1]
+                            sayac+=1 
+                history_rvec=self.rvec
+                val+=1
 
                 self.pose = np.array([self.rvec,self.tvec])
             
@@ -146,6 +171,9 @@ class StreamProcessor(object):
                 cv2.circle(frame, (int(x), int(y)), 2, (0, 255, 0), -1)
 
         return frame
+    
+    def returnshapes(self):
+        return self.shape
 
     def draw_pose(self,frame,pose):
         self.pose_estimator.draw_annotation_box(
@@ -168,7 +196,8 @@ def main():
     # Initialize stream processor
     stream = StreamProcessor(sample_frame)
     # new_stream = estimate_head_pose.StreamProcessor(sample_frame)
-
+    history_shape=[0,0]
+    val=0
     while True:
         # Read frame, crop it, flip it, suits your needs.
         frame_got, frame = cam.read()
@@ -183,20 +212,56 @@ def main():
             frame = cv2.flip(frame, 2)
 
         frame = cv2.imread("tmp.png")
+       
+        stream.get_last_pose()
+        if stream.shape is not None and type(stream.shape) is not int:
+            sayac=0
+            for (x, y) in stream.shape:
+                if val >2:
+                    if abs(float(x)-float(history_shape[sayac][0]))<3:
+                        stream.shape[sayac]=history_shape[sayac]
+                        sayac+=1
+        if stream.shape is not None and type(stream.shape) is not int:
+            sayac=0
+            for (x, y) in stream.shape:
+                if sayac==0:
+                    cv2.circle(frame, (int(x), int(y)), 2, (0, 0, 255), 3)
+                    solx1=x
+                    soly1=y
+                if sayac==16:
+                    cv2.circle(frame, (int(x), int(y)), 2, (0, 0, 255), -1)
+                    sagx2=x
+                    sagy2=y
+                else:
+                    cv2.circle(frame, (int(x), int(y)), 2, (0, 255, 0), -1)
 
-        # Draw boxes
+                sayac+=1
+        history_shape=stream.shape
+
+
+
+            #pixelratio=0.1
+            #yuzgenisligi=(sagx2-solx1)*pixelratio
+            #font = cv2.FONT_HERSHEY_SIMPLEX
+            
+        #    cv2.putText(frame,"YuzMesafe= "+str(yuzgenisligi),(10,100), font, 2, (255, 255, 255), 2, cv2.LINE_AA)
+        
+
+
+
         frame_old = stream.draw_shapes(frame.copy())
-        pose_old = stream.get_last_pose()
-
+        val+=1
+        #pose_old = stream.get_last_pose()
+        #print(pose_old,"pose old")
         #frame_new = new_stream.draw_boxes(frame.copy())
         #pose_new = new_stream.get_last_pose()
-        O.append(pose_old)
+        #O.append(pose_old)
         #N.append(pose_new)
 
-        print("OLD =\t{}\n".format(pose_old))
+        #print("OLD =\t{}\n".format(pose_old))
 
         # Show preview.
-        cv2.imshow("Preview", frame_old)
+        cv2.imshow("Preview", frame)
         if cv2.waitKey(10) == 113:
             cam.release()
             # new_stream.terminate()
