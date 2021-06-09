@@ -42,7 +42,7 @@ LANDMARK_FILE = os.path.join(app_directory,'files/shape_predictor_68_face_landma
 imagesFromClient =[]
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render('public/main.html')
+        self.render('main.html')
 
 class SocketHandler(websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
