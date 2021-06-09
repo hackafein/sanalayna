@@ -167,7 +167,8 @@ def array2string(img):
 # Retrieve command line arguments.
 
 
-public_root = os.path.join(os.path.dirname(__file__))
+#public_root = os.path.join(os.path.dirname(__file__))
+public_root = os.path.join(os.path.dirname(__file__), 'public')
 if __name__ == '__main__':
     tornado.options.parse_command_line() 
     app = tornado.web.Application(
@@ -177,7 +178,7 @@ if __name__ == '__main__':
     handlers = [
         (r'/', IndexHandler),
         (r'/ws', SocketHandler),
-        (r'/public/(.*)', web.StaticFileHandler, {'path': public_root+"/public"})
+        (r'/(.*)', web.StaticFileHandler, {'path': public_root})
         ]
         )
     # set debug to False when running on production/Heroku!
