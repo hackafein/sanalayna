@@ -177,7 +177,7 @@ if __name__ == '__main__':
     handlers = [
         (r'/', IndexHandler),
         (r'/ws', SocketHandler),
-        (r'/(.*)', web.StaticFileHandler, {'path': public_root+"/public"})
+        (r'/static/(.*)', web.StaticFileHandler, {'path': public_root+"/public"})
         ]
         )
     # set debug to False when running on production/Heroku!
