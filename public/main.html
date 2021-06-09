@@ -375,7 +375,8 @@
 
 
     
-    let socket = new WebSocket("ws://localhost:8091/ws");
+    let socket = new WebSocket("ws://0.0.0.0:5000/ws");
+            console.log(socket)
             socket.onopen = function(){
                 console.log("websocket bağlantısı başarılı.");
             }
