@@ -16,6 +16,9 @@ from PIL import Image
 # Import 3rd-party modules.
 from head_pose_estimation import PnpHeadPoseEstimator
 from tornado import websocket, web, ioloop, wsgi
+import tornado.options 
+from tornado.options import define, options
+define("port", default=5000, help="run on the given port", type=int)
 import numpy as np
 import coils
 from stream_pose import StreamProcessor
@@ -33,8 +36,6 @@ import base64
 from io import BytesIO
 
 import pdb
-
-import cv2
 
 app_directory = os.path.dirname(os.path.abspath(__file__))
 LANDMARK_FILE = os.path.join(app_directory,'files/shape_predictor_68_face_landmarks.dat')
