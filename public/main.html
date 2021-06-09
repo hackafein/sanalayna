@@ -109,7 +109,7 @@
     lightRight.position.set(-1000, 0, 0);
     lightRight.intensity = 0
     //Gözlük modelini yükler	
-    loader.load( './glasses/lastoutput.glb', function ( gltf ) {     
+    loader.load( './glasses/realisticscale.glb', function ( gltf ) {     
     object = gltf.scene;				
     object.scale.set( 1,1,1 );			   
     object.position.x = -16.166666666666686;				    //Position (x = right+ left-) 
@@ -302,9 +302,9 @@
 
                             //console.log("size: ",size["x"]);
                             //console.log("size/1.8: ",size["x"]/1.8);
-                            object.scale.x = size["x"]/3.2;
-	                        object.scale.y = size["x"]/3.2;
-	                        object.scale.z = size["x"]/-3.2;
+                            object.scale.x = size["x"];
+	                        object.scale.y = size["x"];
+	                        object.scale.z = size["x"]*-1;
 
                             positions.splice(0, 1);
                             rotations.splice(0, 1);
@@ -392,7 +392,7 @@
 
 
     
-    let socket = new WebSocket("wss://"+ window.location.host + window.location.pathname +"ws");
+    let socket = new WebSocket("ws://"+ window.location.host + window.location.pathname +"ws");
             console.log(socket)
             socket.onopen = function(){
                 console.log("websocket bağlantısı başarılı.");

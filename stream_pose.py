@@ -8,7 +8,7 @@ import pdb
 import dlib
 import cv2
 from imutils import face_utils
-
+import utlis
 # import estimate_head_pose
 
 # multiprocessing may not work on Windows and macOS, check OS for safety.
@@ -109,7 +109,7 @@ class StreamProcessor(object):
 
                 tvecCent[2] = tvec[2]
 
-                print(self.tvec)
+                #print(self.tvec)
                 #print(self.tvec*0.5 + tvecCent*0.5)
 
                 #self.tvec = self.tvec*0.5 + tvecCent*0.5
@@ -146,6 +146,9 @@ class StreamProcessor(object):
                 cv2.circle(frame, (int(x), int(y)), 2, (0, 255, 0), -1)
 
         return frame
+    
+    def returnshapes(self):
+        return self.shape
 
     def draw_pose(self,frame,pose):
         self.pose_estimator.draw_annotation_box(
@@ -183,20 +186,77 @@ def main():
             frame = cv2.flip(frame, 2)
 
         frame = cv2.imread("tmp.png")
+       
+        stream.get_last_pose()
+        if stream.shape is not None and type(stream.shape) is not int:
+            sayac=0
+            for (x, y) in stream.shape:
+                            if sayac==0:
+                                cv2.circle(frame, (int(x), int(y)), 2, (0, 0, 255), 3)
+                                solx1=x
+                                soly1=y
+                            if sayac==16:
+                                cv2.circle(frame, (int(x), int(y)), 2, (0, 0, 255), -1)
+                                sagx2=x
+                                sagy2=y
+                            else:
+                                cv2.circle(frame, (int(x), int(y)), 2, (0, 255, 0), -1)
 
+                            sayac+=1
+            pixelratio=0.1
+            yuzgenisligi=(sagx2-solx1)*pixelratio
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            
+            cv2.putText(frame,"YuzMesafe= "+str(yuzgenisligi),(10,100), font, 2, (255, 255, 255), 2, cv2.LINE_AA)
         # Draw boxes
-        frame_old = stream.draw_shapes(frame.copy())
-        pose_old = stream.get_last_pose()
+        imgContours , conts = utlis.getContours(frame,minArea=200,filter=5)
+                #create an empty image for contours
+        # draw the contours on the empty image
+        scale = 3
+        wP = 210 *scale
+        hP= 297 *scale
+        
+        if len(conts) != 0:
+                print(conts,"----conts-----")
+                biggest = conts[0][2]
+                #print(biggest)
+                imgWarp = utlis.warpImg(frame, biggest, wP,hP)
+                imgContours2, conts2 = utlis.getContours(imgWarp,
+                                                        minArea=50, filter=4,
+                                                        cThr=[50,50],draw = False)
+                cv2.imshow('contur2', imgContours2)
+                if len(conts) != 0:
+                    for obj in conts2:
+                        cv2.polylines(imgContours2,[obj[2]],True,(0,255,0),2)
+                        nPoints = utlis.reorder(obj[2])
+                        nW = round((utlis.findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
+                        nH = round((utlis.findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
+                        cv2.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),
+                                        (255, 0, 255), 3, 8, 0, 0.05)
+                        cv2.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),
+                                        (255, 0, 255), 3, 8, 0, 0.05)
+                        x, y, w, h = obj[3]
+                        cv2.putText(imgContours2, '{}cm'.format(nW), (x + 30, y - 10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.5,
+                                    (255, 0, 255), 2)
+                        cv2.putText(imgContours2, '{}cm'.format(nH), (x - 70, y + h // 2), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.5,
+                                    (255, 0, 255), 2)
+                cv2.imshow('Card', imgContours2)
 
+
+
+        frame_old = stream.draw_shapes(frame.copy())
+
+        #pose_old = stream.get_last_pose()
+        #print(pose_old,"pose old")
         #frame_new = new_stream.draw_boxes(frame.copy())
         #pose_new = new_stream.get_last_pose()
-        O.append(pose_old)
+        #O.append(pose_old)
         #N.append(pose_new)
 
-        print("OLD =\t{}\n".format(pose_old))
+        #print("OLD =\t{}\n".format(pose_old))
 
         # Show preview.
-        cv2.imshow("Preview", frame_old)
+        cv2.imshow("Preview", frame)
         if cv2.waitKey(10) == 113:
             cam.release()
             # new_stream.terminate()

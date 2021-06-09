@@ -86,8 +86,9 @@ class SocketHandler(websocket.WebSocketHandler):
         self.imgArray = []
         self.outputs={}
     def on_message(self, data):
+
         if data == '2':
-            print("veriler alındı")
+            #print("veriler alındı")
             #out = cv2.VideoWriter(r'C:/Users/eness/Desktop/project.avi',cv2.VideoWriter_fourcc(*'DIVX'), 60, (320,240))
             #for i in range(len(self.imgArray)):
             #    out.write(self.imgArray[i])
@@ -97,6 +98,9 @@ class SocketHandler(websocket.WebSocketHandler):
             self.write_message("1")
             return 
         msg = json.loads(data)
+
+
+
         image_str = msg['image']
         
         image = Image.open(StringIO.BytesIO(base64.b64decode(image_str.encode('ascii'))))
@@ -129,19 +133,23 @@ class SocketHandler(websocket.WebSocketHandler):
         posSizRot={
             'position':{ 'x': float(self.tvec[0]), 'y': float(self.tvec[1]), 'z': float(self.tvec[2]) }
             ,'rotation':{ 'x': float(self.rvec[0]), 'y': float(self.rvec[1]), 'z': float(self.rvec[2])}
-            ,'size':{ 'x':120*700/self.tvec[2] }
+            ,'size':{ 'x':self.tvec[2] }
             #,'image':"data:image/jpeg;base64,"+image_str_new
             ,'speed':self.speed
             ,'state':self.found
         }        
-        print(posSizRot)
+        #print(posSizRot)
         #print "After count update"
         self.write_message(json.dumps(posSizRot))
         self.now = time()
     
         rate1,rate5,rate10 = self._fps.tick()
         self.speed = rate1
-    
+        #if msg["CreditCard"]==True:
+            #Credit_x_pixel=msg["CreditCard"]["x_pixel_Count"]
+            #pixels_per_metric =Credit_x_pixel/8.56 #kredi kartı genişliği
+            #glasses_size=posSizRot["position"]
+            
         # Print object ID and the framerate.
         #text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), rate1 , rate5 , rate10 )
         #print( text)
