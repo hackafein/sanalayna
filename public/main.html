@@ -90,6 +90,24 @@
     scene.add(camera);
     directionalLight.position.set( 0, 1, 1 ).normalize();
     scene.add( directionalLight );		
+    //set up lights
+    var lightFront = new THREE.PointLight(0xffffff);
+    lightFront.position.set(0, 0, -1000);
+    lightFront.intensity = 1.5;
+	scene.add(lightFront);
+	
+	var lightFront = new THREE.PointLight(0xffffff);
+    lightFront.position.set(0, 0, 1000);
+    lightFront.intensity = 1.5;
+    scene.add(lightFront);   
+    var lightLeft = new THREE.PointLight(0xffffff);
+    lightLeft.position.set(1000, 0, 0);
+    lightLeft.intensity = 0.7;
+    scene.add(lightLeft);
+    
+    var lightRight = new THREE.PointLight(0xffffff);
+    lightRight.position.set(-1000, 0, 0);
+    lightRight.intensity = 0
     //Gözlük modelini yükler	
     loader.load( './glasses/lastoutput.glb', function ( gltf ) {     
     object = gltf.scene;				
