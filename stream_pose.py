@@ -185,7 +185,7 @@ def main():
         if video_src == 0:
             frame = cv2.flip(frame, 2)
 
-        frame = cv2.imread("tmp.png")
+        frame = cv2.imread("tmp2.png")
        
         stream.get_last_pose()
         if stream.shape is not None and type(stream.shape) is not int:

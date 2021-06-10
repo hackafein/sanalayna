@@ -67,10 +67,10 @@ class SocketHandler(websocket.WebSocketHandler):
         self.cam_w = 320
         self.cam_h = 240
         
-        self.aT = np.array([2,2,1])
-        self.bT = np.array([-320,-250,0])
+        self.aT = np.array([0,0,0])
+        self.bT = np.array([0,0,0])
 
-        self.aR = np.array([-1.0,0.75,-1.])
+        self.aR = np.array([-1,0,-1.])
         self.bR = np.array([0,0,0])
 
         self.poseEstimator = PnpHeadPoseEstimator(self.cam_w,self.cam_h)
@@ -131,12 +131,12 @@ class SocketHandler(websocket.WebSocketHandler):
             image_str_new = array2string(blur)
             self.found = False
         posSizRot={
-            'position':{ 'x': float(self.tvec[0]), 'y': float(self.tvec[1]), 'z': float(self.tvec[2]) }
-            ,'rotation':{ 'x': float(self.rvec[0]), 'y': float(self.rvec[1]), 'z': float(self.rvec[2])}
-            ,'size':{ 'x':self.tvec[2] }
-            #,'image':"data:image/jpeg;base64,"+image_str_new
-            ,'speed':self.speed
-            ,'state':self.found
+        'position':{ 'x': float(self.tvec[0]), 'y': float(self.tvec[1]), 'z': float(self.tvec[2]) }
+        ,'rotation':{ 'x': float(self.rvec[0]), 'y': float(self.rvec[1]), 'z': float(self.rvec[2])}
+        ,'size':{ 'x':self.tvec[2] }
+        #,'image':"data:image/jpeg;base64,"+image_str_new
+        ,'speed':self.speed
+        ,'state':self.found
         }        
         #print(posSizRot)
         #print "After count update"
