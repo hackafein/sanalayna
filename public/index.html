@@ -25,6 +25,14 @@
                 justify-content: center;
             }
         }
+        @media only screen and (min-width:668px){
+            .full-page-line{
+                margin: 15px 0px;
+            }
+            .user-webcam{
+                transform: scale(1.25);
+            }
+        }
         html,body,*{
             font-family: 'Poppins', sans-serif;
         }
@@ -53,6 +61,23 @@
             border-radius: 5px;
             overflow: hidden;
             box-shadow: -1px 0px 13px 2px #c979ad;
+        }
+        .preview{
+            background: rgba(255,255,255,0.85);
+            position:absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+        }
+        .preview-info{
+            position: absolute;
+            top: 10px;
+            font-size: 1.25rem;
+            color: #3c8aba;
+            font-weight: 600;
         }
         .position-absolute{
             position:absolute;
@@ -268,6 +293,11 @@
                 <img class="w-100 h-100 position-absolute" src="./images/blank-face-guide.png" />
                 <video id="front-camera">
                 </video>
+                <div class="preview">
+                    <p class="preview-info text-center">
+                        Gözlük yerleştiriliyor<br>(canlı önizleme)
+                    </p>
+                </div>
               </div>
         </div>
         <div class="container">
@@ -325,7 +355,7 @@
     var frontCameraCanvas = document.createElement("canvas");
 
     //BAŞLANGIÇ AYARLAMALARI
-    document.body.appendChild(glassesCanvas);
+    document.body.querySelector(".preview").appendChild(glassesCanvas);
     frontCameraCanvas.width = frameSizes.width;
     frontCameraCanvas.height = frameSizes.height;
     //camera.position.set( 1, 1, 1250 );
@@ -461,6 +491,7 @@
                 let counterElement = document.body.querySelector(".counter");
                 let recordingSymbol = document.body.querySelector(".recording-symbol");
                 let progressBar = document.body.querySelector(".progress-bar");
+                let preview = document.body.querySelector(".preview");
 
                 let captureFrontCameraAndSend = setInterval(function(){
                 if(recordForMiliseconds > 0){
@@ -490,6 +521,7 @@
                     counterElement.innerHTML = " ";
                     recordingSymbol.style.display = "none";
                     progressBar.style.display = "flex";
+                    previewr.style.display = "flex";
                     statusInfo.style.display = "flex";
                     statusInfo.innerHTML = "Görüntü işleniyor, lütfen bekleyin..."
                     
@@ -531,6 +563,7 @@
                     if(drawedDataCounter >= 750){
                             statusInfo.style.display = "none";
                             progressBar.style.display = "none";
+                            preview.style.display = "none";
                             startBtn.classList.remove("disabled");
                             startBtn.classList.add("enabled");
                             //console.log("Görüntü işleme başarıyla sonlandı!");
@@ -564,15 +597,10 @@
                             object.rotation.x =rotation["x"];
                             object.rotation.y =rotation["y"];
                             object.rotation.z =rotation["z"];
-                            //object.rotation.z = (THREE.Math.degToRad(rotation["z"]))*-1;
-                            console.log("position.x:\n",position["x"]);
                             object.position.x =position["x"]/1.8 ;
                             object.position.y =position["y"]/1.8;
-                            //console.log("position.z:\n",position["z"]);
                             object.position.z =0;
 
-                            //console.log("size: ",size["x"]);
-                            //console.log("size/1.8: ",size["x"]/1.8);
                             object.scale.x = size["x"]/3.75;
 	                        object.scale.y = size["x"]/3.75;
 	                        object.scale.z = size["x"]/-3.75;
@@ -655,41 +683,6 @@
                 
             });
             
-
-
-            /*showBtn.addEventListener("click",function(){
-                playSequence();
-            });
-            var boklubok = document.createElement("canvas");
-            boklubok.width = frameSizes.width;
-            boklubok.height = frameSizes.height;
-            boklubok.setAttribute("id","boklubok");
-            var boklubokCtx = boklubok.getContext("2d");
-            document.body.appendChild(boklubok);
-            var playSequence = function(){
-                if(outputFrames[0] == undefined){
-                    //console.log("gösterdim!");
-                    return;
-                }
-                setTimeout(function(){
-                    //console.log("gösteriyorum!");
-                    //console.log(outputFrames.length);
-                    let frame = new Image();
-                    frame.src = outputFrames[0];
-                    boklubokCtx.drawImage(frame,0,0,frameSizes.width,frameSizes.height);
-                    outputFrames.splice(0, 1);
-                    playSequence();
-                },16);
-            };*/
-
-
-
-
-
-
-
-
-
 
 
 
