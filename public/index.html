@@ -73,10 +73,22 @@
             justify-content: center;
         }
         .preview-info{
+            top: 0px;
+            transform: rotate(-45deg) translateX(-25%) translateY(-50%);
+            margin: 0;
+            background-color: #3c8aba;
+            padding: 10px 50px;
+            left: 0px;
+            transform-origin: center;
+            text-align: left;
+            color: #fff;
+        }
+        .preview-info-2{
             position: absolute;
-            top: 10px;
-            font-size: 1.25rem;
-            color: #3c8aba;
+            bottom: 10px;
+            margin: 0;
+            color:#3c8aba ;
+            font-size: 12px;
             font-weight: 600;
         }
         .position-absolute{
@@ -295,7 +307,10 @@
                 </video>
                 <div class="preview">
                     <p class="preview-info text-center">
-                        Gözlük yerleştiriliyor<br>(canlı önizleme)
+                        canlı önizleme
+                    </p>
+                    <p class="preview-info-2 text-center">
+                        Gözlük yerleştiriliyor...
                     </p>
                 </div>
               </div>
@@ -324,6 +339,7 @@
                 width:frontCamera.clientWidth,
                 height:frontCamera.clientHeight
             };
+    var preview = document.body.querySelector(".preview");
     var scene = new THREE.Scene(); //three.js için 3d sahne 
     var camera = new THREE.OrthographicCamera( frameSizes.width / - 2, frameSizes.width / 2, frameSizes.height / 2, frameSizes.height / - 2, -1000, 5000 );
     //var camera = new THREE.PerspectiveCamera( 45, 320 / 240, 1, 5000 );   //three.js için 3d kamera
@@ -355,7 +371,7 @@
     var frontCameraCanvas = document.createElement("canvas");
 
     //BAŞLANGIÇ AYARLAMALARI
-    document.body.querySelector(".preview").appendChild(glassesCanvas);
+    preview.appendChild(glassesCanvas);
     frontCameraCanvas.width = frameSizes.width;
     frontCameraCanvas.height = frameSizes.height;
     //camera.position.set( 1, 1, 1250 );
@@ -491,7 +507,6 @@
                 let counterElement = document.body.querySelector(".counter");
                 let recordingSymbol = document.body.querySelector(".recording-symbol");
                 let progressBar = document.body.querySelector(".progress-bar");
-                let preview = document.body.querySelector(".preview");
 
                 let captureFrontCameraAndSend = setInterval(function(){
                 if(recordForMiliseconds > 0){
@@ -521,7 +536,7 @@
                     counterElement.innerHTML = " ";
                     recordingSymbol.style.display = "none";
                     progressBar.style.display = "flex";
-                    previewr.style.display = "flex";
+                    preview.style.display = "flex";
                     statusInfo.style.display = "flex";
                     statusInfo.innerHTML = "Görüntü işleniyor, lütfen bekleyin..."
                     
