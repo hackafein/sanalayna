@@ -247,7 +247,7 @@
             justify-content: center;
             padding:5px;
             border-radius: 6px;
-            background-color: #ed4337;
+            background-color: #c95a53;
             color: #fff;
             margin-bottom:5px;
         }
@@ -306,7 +306,7 @@
   <body>
         <div class="container">
             <div id="time-left"></div>
-            <div class="important-info">EN DOĞRU SONUÇ İÇİN LÜTFEN <strong>GOOGLE CHROME</strong> İLE AÇINIZ</div>
+            <div class="important-info">EN DOĞRU SONUÇ İÇİN LÜTFEN <strong style="margin: 0px 5px;">GOOGLE CHROME</strong> İLE AÇINIZ</div>
             <div class="header-info waiting m-auto text-center mb-5">Bağlantı kuruluyor... <img class="loading" src="./images/loading.svg"></div>
             <button id="start-record" class="disabled m-auto mb-5">BAŞLAT</button>
             <div class="text-center position-relative d-flex justify-center">
@@ -346,407 +346,407 @@
             </div>
         </div>
         
-      
-      
-  </body>
-  <script>
-    //TEMEL DEĞİŞKENLER
-    var isDone = false;
-    var frontCamera = document.getElementById("front-camera");
-    const frameSizes = {//Kodun her yerinde işlenecek görüntülerde bu boyutlar kullanılacak
-                width:frontCamera.clientWidth,
-                height:frontCamera.clientHeight
-            };
-    var preview = document.body.querySelector(".preview");
-    var scene = new THREE.Scene(); //three.js için 3d sahne 
-    var camera = new THREE.OrthographicCamera( frameSizes.width / - 2, frameSizes.width / 2, frameSizes.height / 2, frameSizes.height / - 2, -1000, 5000 );
-    //var camera = new THREE.PerspectiveCamera( 45, 320 / 240, 1, 5000 );   //three.js için 3d kamera
-    var glassesCanvas = document.body.querySelector(".glasses-canvas"); //three.js nin kullanacağı canvas. Bu canvasta 3d gözlük modeli gösterileceği için ismi glassesCanvas.
-    var momentum = 1.;
-    var outputFrames = [];
-    var renderer = new THREE.WebGLRenderer({ alpha: true , canvas:glassesCanvas}); //oluşturulan canvas üzerinde WebGL grafik çizimi yapılacak. three.js için.
-    //var ambientLight = new THREE.AmbientLight( 0xcccccc );
-    //var directionalLight = new THREE.DirectionalLight( 0xffffff );
-    var loader = new THREE.GLTFLoader();
-    var object;
-    var positions = [];
-    var positions1 = [];
-    var rotations = [];
-    var sizes = [];
-    var recordedFrames = [];
-    var recordedFrames2 = [];
-    var receivedDataCounter = 0;
-    var startBtn = document.getElementById("start-record");
-    var sag_sap_1;
-    var sag_sap_2;
-    var sag_sap_3;
-    var sol_sap_1;
-    var sol_sap_2;
-    var sol_sap_3;
-    //var showBtn = document.createElement("button");
-    //showBtn.innerText = "Göster";
-    
-    var frontCameraCanvas = document.createElement("canvas");
-
-    //BAŞLANGIÇ AYARLAMALARI
-    frontCameraCanvas.width = frameSizes.width;
-    frontCameraCanvas.height = frameSizes.height;
-    //camera.position.set( 1, 1, 1250 );
-    camera.lookAt(0,0,1);
-    renderer.setClearColor( 0x000000, 0 ); // the default
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize(frameSizes.width, frameSizes.height);
-    //scene.add( ambientLight );
-    scene.add(camera);
-    //directionalLight.position.set( 0, 1, 1 ).normalize();
-    //scene.add( directionalLight );		
-    //Gözlük modelini yükler
-    
-    loader.load( './glasses/lastoutput.glb', function ( gltf ) {     
-    object = gltf.scene;				
-    object.scale.set( 1,1,1 );			   
-    object.position.x = 0;				    //Position (x = right+ left-) 
-    object.position.y = 0;				    //Position (y = up+, down-)
-    object.position.z = 600;		    //Position (z = front +, back-)
-
-    sag_sap_1=object.children[0].children[0].children[0].children[0].children[0];
-	sag_sap_2=object.children[0].children[0].children[0].children[0].children[1];
-	sag_sap_3=object.children[0].children[0].children[0].children[0].children[2];
-
-	sol_sap_1=object.children[0].children[0].children[0].children[0].children[3];
-	sol_sap_2=object.children[0].children[0].children[0].children[0].children[4];
-	sol_sap_3=object.children[0].children[0].children[0].children[0].children[5];
-
-    scene.add( object );
-    renderer.render(scene,camera);
-    });	 
-
-
-    //KULLANICININ ÖN KAMERASINDAN ANLIK GÖRÜNTÜ YAKALAR VE "frontCamera" DEĞİŞKENİNDEKİ HTML ELEMENTİNDE ANLIK GÖSTERİR
-    let constraintObj = { 
-            audio: false, 
-                video: { 
-                    facingMode: "user"
-                } 
-            }; 
+        <script>
+            //TEMEL DEĞİŞKENLER
+            var isDone = false;
+            var frontCamera = document.getElementById("front-camera");
+            const frameSizes = {//Kodun her yerinde işlenecek görüntülerde bu boyutlar kullanılacak
+                        width:frontCamera.clientWidth,
+                        height:frontCamera.clientHeight
+                    };
+            var preview = document.body.querySelector(".preview");
+            var scene = new THREE.Scene(); //three.js için 3d sahne 
+            var camera = new THREE.OrthographicCamera( frameSizes.width / - 2, frameSizes.width / 2, frameSizes.height / 2, frameSizes.height / - 2, -1000, 5000 );
+            //var camera = new THREE.PerspectiveCamera( 45, 320 / 240, 1, 5000 );   //three.js için 3d kamera
+            var glassesCanvas = document.body.querySelector(".glasses-canvas"); //three.js nin kullanacağı canvas. Bu canvasta 3d gözlük modeli gösterileceği için ismi glassesCanvas.
+            var momentum = 1.;
+            var outputFrames = [];
+            var renderer = new THREE.WebGLRenderer({ alpha: true , canvas:glassesCanvas}); //oluşturulan canvas üzerinde WebGL grafik çizimi yapılacak. three.js için.
+            //var ambientLight = new THREE.AmbientLight( 0xcccccc );
+            //var directionalLight = new THREE.DirectionalLight( 0xffffff );
+            var loader = new THREE.GLTFLoader();
+            var object;
+            var positions = [];
+            var positions1 = [];
+            var rotations = [];
+            var sizes = [];
+            var recordedFrames = [];
+            var recordedFrames2 = [];
+            var receivedDataCounter = 0;
+            var startBtn = document.getElementById("start-record");
+            var sag_sap_1;
+            var sag_sap_2;
+            var sag_sap_3;
+            var sol_sap_1;
+            var sol_sap_2;
+            var sol_sap_3;
+            //var showBtn = document.createElement("button");
+            //showBtn.innerText = "Göster";
             
-            if (navigator.mediaDevices === undefined) {
-                navigator.mediaDevices = {};
-                navigator.mediaDevices.getUserMedia = function(constraintObj) {
-                    let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                    if (!getUserMedia) {
-                        return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                    }
-                    return new Promise(function(resolve, reject) {
-                        getUserMedia.call(navigator, constraintObj, resolve, reject);
-                    });
-                }
-            }else{
-                navigator.mediaDevices.enumerateDevices()
-                .then(devices => {
-                    devices.forEach(device=>{
-                        //console.log(device.kind.toUpperCase(), device.label);
-                        //, device.deviceId
-                    })
-                })
-                .catch(err=>{
-                    //console.log(err.name, err.message);
-                })
-            }
-
-            navigator.mediaDevices.getUserMedia(constraintObj)
-            .then(function(mediaStreamObj) {
-                //mediaStream ı ön kameranın gösterileceği video elemmentine bağla
-                let cam_view = frontCamera;
-                if ("srcObject" in cam_view) {
-                    cam_view.srcObject = mediaStreamObj;
-                } else {
-                    //old version
-                    cam_view.src = window.URL.createObjectURL(mediaStreamObj);
-                }
-                
-                cam_view.onloadedmetadata = function(ev) {
-                    //console.log(mediaStreamObj);
-                    //show in the video element what is being captured by the webcam
-                    cam_view.play();
-            };
-         });
-
-         
-
-    //HTML "video" ELEMENTİNDE SERGİLENEN KAMERA GÖRÜNTÜSÜNÜ HTML "canvas" ELEMENTİNDE SERGİLER, BUNU SEBEBİ GÖRÜNTÜDE OYNAMA YAPABİLMEK İÇİN CANVAS ELEMENTİNİ KULLANMAK ZORUNDA OLMAMIZ 
-    //AYRICA HER 33 MİLİSANİYEDE YAKALANAN GÖRÜNTÜYÜ 0.3 ORANINDA KALİTEDE JPEG E ÇEVİRİR VE ARDINDAN PYTHON SERVER A GÖNDERİR
-    
-
-
-    
-    startBtn.addEventListener("click",function(){
-            if(startBtn.classList.contains("enabled")){
-                startBtn.classList.remove("enabled");
-                startBtn.classList.add("disabled");
-                let recordForMiliseconds = 12000;
-                let counter = 0;
-                let drawedDataCounter = 0;
-                let mergedCanvas = document.createElement("canvas");
-                mergedCanvas.setAttribute("id","mergedCanvas");
-                mergedCanvas.width = frameSizes.width;
-                mergedCanvas.height = frameSizes.height;
-                let mergedCanvasCtx = mergedCanvas.getContext("2d");
-                let ctx = frontCameraCanvas.getContext("2d");
-                let stream = mergedCanvas.captureStream(60); // the parameter is the desired framerate, see the MDN doc for more info
-                let mediaRecorder = new MediaRecorder(stream);
-                let chunks = [];
-
-                //mediaRecorder.start();
-
-                mediaRecorder.ondataavailable = function(e){
-                    ////console.log("------e--------");
-                    ////console.log(e);
-                    chunks.push(e.data);
-                };
-                mediaRecorder.onstop = function(e){
-                    let blob = new Blob(chunks, { type : 'video/mp4' }); // other types are available such as 'video/webm' for instance, see the doc for more info
-                    ////console.log("----------CHUNKS--------");   
-                    ////console.log(chunks);
-                    chunks = [];
-                    let video = document.createElement("video");
-                    let videoURL = URL.createObjectURL(blob);
-                    //console.log(videoURL);
-                    video.width = frameSizes.width;
-                    video.height = frameSizes.height;
-                    video.controls = true;
-                    video.src = videoURL;
-                    video.style.marginRight = "5px";
-                    video.style.marginBottom = "5px";
-                    document.body.querySelector(".results .rendered").appendChild(video);
-                };
-
-                let counterElement = document.body.querySelector(".counter");
-                let recordingSymbol = document.body.querySelector(".recording-symbol");
-                let progressBar = document.body.querySelector(".progress-bar");
-
-                let captureFrontCameraAndSend = setInterval(function(){
-                if(recordForMiliseconds > 0){
-                  counterElement.innerHTML = parseInt(recordForMiliseconds / 1000);
-                  recordingSymbol.style.display = "flex";
-                  
-                  ctx.drawImage(frontCamera,0,0,frameSizes.width, frameSizes.height);
-                  //recordedFrames.push(ctx.getImageData(0, 0, frameSizes.width, frameSizes.height));
-                  this.mediumQuality = frontCameraCanvas.toDataURL('image/jpeg', 0.9)
-                  
-                  this.image = mediumQuality.split(',')[1];
-                  message = JSON.stringify(
-                    {
-                      "image":image,
-                      "type":"image"
-                      //"isDone": "false"
-                    }
-				          )
-                  socket.send(message);
-                  recordedFrames.push(this.mediumQuality);
-                  recordedFrames2.push(this.mediumQuality);
-                  counter+=1;
-                  
-                  recordForMiliseconds-=16;
-                }
-                else{
-                    counterElement.innerHTML = " ";
-                    recordingSymbol.style.display = "none";
-                    progressBar.style.display = "flex";
-                    preview.style.display = "flex";
-                    statusInfo.style.display = "flex";
-                    statusInfo.innerHTML = "Görüntü işleniyor, lütfen bekleyin..."
+            var frontCameraCanvas = document.createElement("canvas");
+        
+            //BAŞLANGIÇ AYARLAMALARI
+            frontCameraCanvas.width = frameSizes.width;
+            frontCameraCanvas.height = frameSizes.height;
+            //camera.position.set( 1, 1, 1250 );
+            camera.lookAt(0,0,1);
+            renderer.setClearColor( 0x000000, 0 ); // the default
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize(frameSizes.width, frameSizes.height);
+            //scene.add( ambientLight );
+            scene.add(camera);
+            //directionalLight.position.set( 0, 1, 1 ).normalize();
+            //scene.add( directionalLight );		
+            //Gözlük modelini yükler
+            
+            loader.load( './glasses/lastoutput.glb', function ( gltf ) {     
+            object = gltf.scene;				
+            object.scale.set( 1,1,1 );			   
+            object.position.x = 0;				    //Position (x = right+ left-) 
+            object.position.y = 0;				    //Position (y = up+, down-)
+            object.position.z = 600;		    //Position (z = front +, back-)
+        
+            sag_sap_1=object.children[0].children[0].children[0].children[0].children[0];
+            sag_sap_2=object.children[0].children[0].children[0].children[0].children[1];
+            sag_sap_3=object.children[0].children[0].children[0].children[0].children[2];
+        
+            sol_sap_1=object.children[0].children[0].children[0].children[0].children[3];
+            sol_sap_2=object.children[0].children[0].children[0].children[0].children[4];
+            sol_sap_3=object.children[0].children[0].children[0].children[0].children[5];
+        
+            scene.add( object );
+            renderer.render(scene,camera);
+            });	 
+        
+        
+            //KULLANICININ ÖN KAMERASINDAN ANLIK GÖRÜNTÜ YAKALAR VE "frontCamera" DEĞİŞKENİNDEKİ HTML ELEMENTİNDE ANLIK GÖSTERİR
+            let constraintObj = { 
+                    audio: false, 
+                        video: { 
+                            facingMode: "user"
+                        } 
+                    }; 
                     
-                    socket.send(2);
-                    // message = JSON.stringify(
-                    // {
-                    //   "isDone": "true"
-                    // }
-				    //       )
-                  //socket.send(message);
-                    //mediaRecorder.stop();
-                    //console.log("Gönderilen Veri Sayısı: " + counter);
-                    //console.log("rocordedFrames Length: "+recordedFrames.length);
-                    clearInterval(captureFrontCameraAndSend);
-                }
-                },16);
-                let state;
-                let tempCanvas = document.createElement("canvas");
-                tempCanvas.width = frameSizes.width;
-                tempCanvas.height = frameSizes.height;
-                let tempCanvasCtx = tempCanvas.getContext("2d");
-                let position;
-                let rotation;
-                let imageURL;
-                let img = new Image();
-                let statusInfo = document.body.querySelector(".status-info");
-                let progressStick = document.body.querySelector(".progress");
-                let progress = 0;
-                
-                let drawGlasses = function(){
-                    state = mediaRecorder.state;
-                    if(state == "recording"){
-                        mediaRecorder.pause();
-                        //console.log(mediaRecorder.state);
-                    }
-                    else{
-                        //console.log("Kayıt için hazırlanıyor...");
-                    }
-                    if(drawedDataCounter >= 750){
-                            statusInfo.style.display = "none";
-                            progressBar.style.display = "none";
-                            preview.style.display = "none";
-                            startBtn.classList.remove("disabled");
-                            startBtn.classList.add("enabled");
-                            //console.log("Görüntü işleme başarıyla sonlandı!");
-                            /*try{
-                                ConcatenateBlobs(outputFrames, 'video/mp4', function(resultingBlob) {
-                                //console.log(URL.createObjectURL(resultingBlob));
+                    if (navigator.mediaDevices === undefined) {
+                        navigator.mediaDevices = {};
+                        navigator.mediaDevices.getUserMedia = function(constraintObj) {
+                            let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                            if (!getUserMedia) {
+                                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                            }
+                            return new Promise(function(resolve, reject) {
+                                getUserMedia.call(navigator, constraintObj, resolve, reject);
                             });
-                            }
-                            catch(err){
-                                //console.log(err.message);
-                            }*/     
-                            mediaRecorder.stop();
-                            //document.body.appendChild(showBtn);
-                            return;
-                            
                         }
-                    else{
-                        progress = parseFloat((drawedDataCounter * 100)/750);
-                        progressBar.setAttribute("progress",parseInt(progress));
-                        progressStick.style.width = progress + "%";
-
-                        if(positions[0]!=undefined && rotations[0]!=undefined && recordedFrames[0]!=undefined){
-                            //console.log("Görüntü işleniyor...");
-                            position = positions[0];
-                            rotation = rotations[0];
-                            imageURL = recordedFrames[0];
-                            size = sizes[0];
-                            img.src = imageURL;
-
-                            
-                            object.rotation.x =rotation["x"];
-                            object.rotation.y =rotation["y"];
-                            object.rotation.z =rotation["z"];
-                            object.position.x =position["x"]/1.8 ;
-                            object.position.y =position["y"]/1.8;
-                            object.position.z =0;
-
-                            object.scale.x = size["x"]/3.75;
-	                        object.scale.y = size["x"]/3.75;
-	                        object.scale.z = size["x"]/-3.75;
-
-                            if (rotation.y>0.06)
+                    }else{
+                        navigator.mediaDevices.enumerateDevices()
+                        .then(devices => {
+                            devices.forEach(device=>{
+                                //console.log(device.kind.toUpperCase(), device.label);
+                                //, device.deviceId
+                            })
+                        })
+                        .catch(err=>{
+                            //console.log(err.name, err.message);
+                        })
+                    }
+        
+                    navigator.mediaDevices.getUserMedia(constraintObj)
+                    .then(function(mediaStreamObj) {
+                        //mediaStream ı ön kameranın gösterileceği video elemmentine bağla
+                        let cam_view = frontCamera;
+                        if ("srcObject" in cam_view) {
+                            cam_view.srcObject = mediaStreamObj;
+                        } else {
+                            //old version
+                            cam_view.src = window.URL.createObjectURL(mediaStreamObj);
+                        }
+                        
+                        cam_view.onloadedmetadata = function(ev) {
+                            //console.log(mediaStreamObj);
+                            //show in the video element what is being captured by the webcam
+                            cam_view.play();
+                    };
+                 });
+        
+                 
+        
+            //HTML "video" ELEMENTİNDE SERGİLENEN KAMERA GÖRÜNTÜSÜNÜ HTML "canvas" ELEMENTİNDE SERGİLER, BUNU SEBEBİ GÖRÜNTÜDE OYNAMA YAPABİLMEK İÇİN CANVAS ELEMENTİNİ KULLANMAK ZORUNDA OLMAMIZ 
+            //AYRICA HER 33 MİLİSANİYEDE YAKALANAN GÖRÜNTÜYÜ 0.3 ORANINDA KALİTEDE JPEG E ÇEVİRİR VE ARDINDAN PYTHON SERVER A GÖNDERİR
+            
+        
+        
+            
+            startBtn.addEventListener("click",function(){
+                    if(startBtn.classList.contains("enabled")){
+                        startBtn.classList.remove("enabled");
+                        startBtn.classList.add("disabled");
+                        let recordForMiliseconds = 12000;
+                        let counter = 0;
+                        let drawedDataCounter = 0;
+                        let mergedCanvas = document.createElement("canvas");
+                        mergedCanvas.setAttribute("id","mergedCanvas");
+                        mergedCanvas.width = frameSizes.width;
+                        mergedCanvas.height = frameSizes.height;
+                        let mergedCanvasCtx = mergedCanvas.getContext("2d");
+                        let ctx = frontCameraCanvas.getContext("2d");
+                        let stream = mergedCanvas.captureStream(60); // the parameter is the desired framerate, see the MDN doc for more info
+                        let mediaRecorder = new MediaRecorder(stream);
+                        let chunks = [];
+        
+                        //mediaRecorder.start();
+        
+                        mediaRecorder.ondataavailable = function(e){
+                            ////console.log("------e--------");
+                            ////console.log(e);
+                            chunks.push(e.data);
+                        };
+                        mediaRecorder.onstop = function(e){
+                            let blob = new Blob(chunks, { type : 'video/mp4' }); // other types are available such as 'video/webm' for instance, see the doc for more info
+                            ////console.log("----------CHUNKS--------");   
+                            ////console.log(chunks);
+                            chunks = [];
+                            let video = document.createElement("video");
+                            let videoURL = URL.createObjectURL(blob);
+                            //console.log(videoURL);
+                            video.width = frameSizes.width;
+                            video.height = frameSizes.height;
+                            video.controls = true;
+                            video.src = videoURL;
+                            video.style.marginRight = "5px";
+                            video.style.marginBottom = "5px";
+                            document.body.querySelector(".results .rendered").appendChild(video);
+                        };
+        
+                        let counterElement = document.body.querySelector(".counter");
+                        let recordingSymbol = document.body.querySelector(".recording-symbol");
+                        let progressBar = document.body.querySelector(".progress-bar");
+        
+                        let captureFrontCameraAndSend = setInterval(function(){
+                        if(recordForMiliseconds > 0){
+                          counterElement.innerHTML = parseInt(recordForMiliseconds / 1000);
+                          recordingSymbol.style.display = "flex";
+                          
+                          ctx.drawImage(frontCamera,0,0,frameSizes.width, frameSizes.height);
+                          //recordedFrames.push(ctx.getImageData(0, 0, frameSizes.width, frameSizes.height));
+                          this.mediumQuality = frontCameraCanvas.toDataURL('image/jpeg', 0.9)
+                          
+                          this.image = mediumQuality.split(',')[1];
+                          message = JSON.stringify(
                             {
-                                
-                                sag_sap_1.visible=false;
-                                sag_sap_2.visible=false;
-                                sag_sap_3.visible=false;
+                              "image":image,
+                              "type":"image"
+                              //"isDone": "false"
                             }
-                            else
-                            {
-                                sag_sap_1.visible=true;
-                                sag_sap_2.visible=true;
-                                sag_sap_3.visible=true;
-                            }
-                            
-
-                            if (rotation.y<-0.02)
-                            {
-                                sol_sap_1.visible=false;
-                                sol_sap_2.visible=false;
-                                sol_sap_3.visible=false;
-
-                            }
-                            else
-                            {
-                                sol_sap_1.visible=true;
-                                sol_sap_2.visible=true;
-                                sol_sap_3.visible=true;
-                            }
-
-                            positions.splice(0, 1);
-                            rotations.splice(0, 1);
-                            recordedFrames.splice(0, 1);
-                            sizes.splice(0,1);
-
-                            renderer.render( scene, camera );
-                            tempCanvasCtx.drawImage(img,0,0,frameSizes.width, frameSizes.height);
-                            tempCanvasCtx.drawImage(glassesCanvas,0,0,frameSizes.width, frameSizes.height);
-                            let data = tempCanvasCtx.getImageData(0, 0, frameSizes.width, frameSizes.height);
-                            mergedCanvasCtx.putImageData(data,0,0);
-                            state = mediaRecorder.state;
-                            switch(state){
-                                case "paused":
-                                    //console.log("media recorder is recording!");
-                                    mediaRecorder.resume();
-                                    break;
-                                case "inactive":
-                                    //console.log("media recorder started!");
-                                    mediaRecorder.start();
-                                    break;
-                                default:
-                                    break;
-                            }
-                            
-                            /*let mergedImage = mergedCanvas.toDataURL('image/jpeg', 0.3)
-                  
-                            outputFrames.push(mergedImage.split(',')[1]); */  
-                            //mergedCanvasCtx.putImageData(kaka,0,0);
-                            //outputFrames.push(kaka);
-                            //mediaRecorder.pause();
-                            /*mergedCanvas.toBlob(function(blob){
-                                outputFrames.push(blob);
-                                try{//console.log(blob.prototype.arrayBuffer())}catch(err){//console.log(err.message)};
-                            },'image/jpeg');*/
-                            drawedDataCounter += 1;
-                            setTimeout(drawGlasses,14);
+                                  )
+                          socket.send(message);
+                          recordedFrames.push(this.mediumQuality);
+                          recordedFrames2.push(this.mediumQuality);
+                          counter+=1;
+                          
+                          recordForMiliseconds-=16;
                         }
                         else{
-                            //console.log("Verilerin tamamlanması bekleniyor: Posizyon,Rotasyon ya da Kayıtlı Resim ...");
-                            setTimeout(drawGlasses,16);
+                            counterElement.innerHTML = " ";
+                            recordingSymbol.style.display = "none";
+                            progressBar.style.display = "flex";
+                            preview.style.display = "flex";
+                            statusInfo.style.display = "flex";
+                            statusInfo.innerHTML = "Görüntü işleniyor, lütfen bekleyin..."
+                            
+                            socket.send(2);
+                            // message = JSON.stringify(
+                            // {
+                            //   "isDone": "true"
+                            // }
+                            //       )
+                          //socket.send(message);
+                            //mediaRecorder.stop();
+                            //console.log("Gönderilen Veri Sayısı: " + counter);
+                            //console.log("rocordedFrames Length: "+recordedFrames.length);
+                            clearInterval(captureFrontCameraAndSend);
                         }
+                        },16);
+                        let state;
+                        let tempCanvas = document.createElement("canvas");
+                        tempCanvas.width = frameSizes.width;
+                        tempCanvas.height = frameSizes.height;
+                        let tempCanvasCtx = tempCanvas.getContext("2d");
+                        let position;
+                        let rotation;
+                        let imageURL;
+                        let img = new Image();
+                        let statusInfo = document.body.querySelector(".status-info");
+                        let progressStick = document.body.querySelector(".progress");
+                        let progress = 0;
+                        
+                        let drawGlasses = function(){
+                            state = mediaRecorder.state;
+                            if(state == "recording"){
+                                mediaRecorder.pause();
+                                //console.log(mediaRecorder.state);
+                            }
+                            else{
+                                //console.log("Kayıt için hazırlanıyor...");
+                            }
+                            if(drawedDataCounter >= 750){
+                                    statusInfo.style.display = "none";
+                                    progressBar.style.display = "none";
+                                    preview.style.display = "none";
+                                    startBtn.classList.remove("disabled");
+                                    startBtn.classList.add("enabled");
+                                    //console.log("Görüntü işleme başarıyla sonlandı!");
+                                    /*try{
+                                        ConcatenateBlobs(outputFrames, 'video/mp4', function(resultingBlob) {
+                                        //console.log(URL.createObjectURL(resultingBlob));
+                                    });
+                                    }
+                                    catch(err){
+                                        //console.log(err.message);
+                                    }*/     
+                                    mediaRecorder.stop();
+                                    //document.body.appendChild(showBtn);
+                                    return;
+                                    
+                                }
+                            else{
+                                progress = parseFloat((drawedDataCounter * 100)/750);
+                                progressBar.setAttribute("progress",parseInt(progress));
+                                progressStick.style.width = progress + "%";
+        
+                                if(positions[0]!=undefined && rotations[0]!=undefined && recordedFrames[0]!=undefined){
+                                    //console.log("Görüntü işleniyor...");
+                                    position = positions[0];
+                                    rotation = rotations[0];
+                                    imageURL = recordedFrames[0];
+                                    size = sizes[0];
+                                    img.src = imageURL;
+        
+                                    
+                                    object.rotation.x =rotation["x"];
+                                    object.rotation.y =rotation["y"];
+                                    object.rotation.z =rotation["z"];
+                                    object.position.x =position["x"]/1.8 ;
+                                    object.position.y =position["y"]/1.8;
+                                    object.position.z =0;
+        
+                                    object.scale.x = size["x"]/3.75;
+                                    object.scale.y = size["x"]/3.75;
+                                    object.scale.z = size["x"]/-3.75;
+        
+                                    if (rotation.y>0.06)
+                                    {
+                                        
+                                        sag_sap_1.visible=false;
+                                        sag_sap_2.visible=false;
+                                        sag_sap_3.visible=false;
+                                    }
+                                    else
+                                    {
+                                        sag_sap_1.visible=true;
+                                        sag_sap_2.visible=true;
+                                        sag_sap_3.visible=true;
+                                    }
+                                    
+        
+                                    if (rotation.y<-0.02)
+                                    {
+                                        sol_sap_1.visible=false;
+                                        sol_sap_2.visible=false;
+                                        sol_sap_3.visible=false;
+        
+                                    }
+                                    else
+                                    {
+                                        sol_sap_1.visible=true;
+                                        sol_sap_2.visible=true;
+                                        sol_sap_3.visible=true;
+                                    }
+        
+                                    positions.splice(0, 1);
+                                    rotations.splice(0, 1);
+                                    recordedFrames.splice(0, 1);
+                                    sizes.splice(0,1);
+        
+                                    renderer.render( scene, camera );
+                                    tempCanvasCtx.drawImage(img,0,0,frameSizes.width, frameSizes.height);
+                                    tempCanvasCtx.drawImage(glassesCanvas,0,0,frameSizes.width, frameSizes.height);
+                                    let data = tempCanvasCtx.getImageData(0, 0, frameSizes.width, frameSizes.height);
+                                    mergedCanvasCtx.putImageData(data,0,0);
+                                    state = mediaRecorder.state;
+                                    switch(state){
+                                        case "paused":
+                                            //console.log("media recorder is recording!");
+                                            mediaRecorder.resume();
+                                            break;
+                                        case "inactive":
+                                            //console.log("media recorder started!");
+                                            mediaRecorder.start();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    
+                                    /*let mergedImage = mergedCanvas.toDataURL('image/jpeg', 0.3)
+                          
+                                    outputFrames.push(mergedImage.split(',')[1]); */  
+                                    //mergedCanvasCtx.putImageData(kaka,0,0);
+                                    //outputFrames.push(kaka);
+                                    //mediaRecorder.pause();
+                                    /*mergedCanvas.toBlob(function(blob){
+                                        outputFrames.push(blob);
+                                        try{//console.log(blob.prototype.arrayBuffer())}catch(err){//console.log(err.message)};
+                                    },'image/jpeg');*/
+                                    drawedDataCounter += 1;
+                                    setTimeout(drawGlasses,14);
+                                }
+                                else{
+                                    //console.log("Verilerin tamamlanması bekleniyor: Posizyon,Rotasyon ya da Kayıtlı Resim ...");
+                                    setTimeout(drawGlasses,16);
+                                }
+                            }
+                        };
+                        drawGlasses();
                     }
-                };
-                drawGlasses();
-            }
-                
-                
-            });
-            
+                        
+                        
+                    });
+                    
+        
+        
+        
+            var headerInfo = document.body.querySelector(".header-info");
+            let socket = new WebSocket("wss://"+ window.location.host + window.location.pathname +"ws");
+                    socket.onopen = function(){
+                        console.log("websocket bağlantısı başarılı.");
+                        headerInfo.innerHTML="Kafanı karenin ortasında tutmaya çalış!";
+                        headerInfo.classList.remove("waiting");
+                        startBtn.classList.remove("disabled");
+                        startBtn.classList.add("enabled");
+                    }
+                    socket.onerror = function(error) {
+                        alert(`[error] ${error}`);
+                        //console.log("hata var gulüm");
+                    };
+        
+                    // message received - show the message in div#messages
+                    socket.onmessage = function(event) {
+                      receivedDataCounter+=1;
+                      let message = JSON.parse(event.data);
+                      if(message["isDone"]=="true"){
+                        isDone = true;
+                      }else{
+                        positions.push(message["position"]);
+                        rotations.push(message["rotation"]);
+                        sizes.push(message["size"]);
+                        //console.log("positions length:",positions1.length);
+                      }
+                      
+                    }
+        
+        
+          </script>
+      
+  </body>
 
-
-
-    var headerInfo = document.body.querySelector(".header-info");
-    let socket = new WebSocket("wss://"+ window.location.host + window.location.pathname +"ws");
-            socket.onopen = function(){
-                console.log("websocket bağlantısı başarılı.");
-                headerInfo.innerHTML="Kafanı karenin ortasında tutmaya çalış!";
-                headerInfo.classList.remove("waiting");
-                startBtn.classList.remove("disabled");
-                startBtn.classList.add("enabled");
-            }
-            socket.onerror = function(error) {
-                alert(`[error] ${error}`);
-                //console.log("hata var gulüm");
-            };
-
-            // message received - show the message in div#messages
-            socket.onmessage = function(event) {
-              receivedDataCounter+=1;
-              let message = JSON.parse(event.data);
-              if(message["isDone"]=="true"){
-                isDone = true;
-              }else{
-                positions.push(message["position"]);
-                rotations.push(message["rotation"]);
-                sizes.push(message["size"]);
-                //console.log("positions length:",positions1.length);
-              }
-              
-            }
-
-
-  </script>
 </html>
