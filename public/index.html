@@ -73,6 +73,7 @@
             justify-content: center;
         }
         .preview-info{
+            position: absolute;
             top: 0px;
             transform: rotate(-45deg) translateX(-25%) translateY(-50%);
             margin: 0;
@@ -285,6 +286,11 @@
             animation-timing-function: linear;
             margin-left: 5px;
         }
+        .glasses-canvas{
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     </style>
 </head>
   <body>
@@ -312,6 +318,7 @@
                     <p class="preview-info-2 text-center">
                         Gözlük yerleştiriliyor...
                     </p>
+                    <canvas class="glasses-canvas"></canvas>
                 </div>
               </div>
         </div>
@@ -343,7 +350,7 @@
     var scene = new THREE.Scene(); //three.js için 3d sahne 
     var camera = new THREE.OrthographicCamera( frameSizes.width / - 2, frameSizes.width / 2, frameSizes.height / 2, frameSizes.height / - 2, -1000, 5000 );
     //var camera = new THREE.PerspectiveCamera( 45, 320 / 240, 1, 5000 );   //three.js için 3d kamera
-    var glassesCanvas = document.createElement("canvas"); //three.js nin kullanacağı canvas. Bu canvasta 3d gözlük modeli gösterileceği için ismi glassesCanvas.
+    var glassesCanvas = document.body.querySelector(".glasses-canvas"); //three.js nin kullanacağı canvas. Bu canvasta 3d gözlük modeli gösterileceği için ismi glassesCanvas.
     var momentum = 1.;
     var outputFrames = [];
     var renderer = new THREE.WebGLRenderer({ alpha: true , canvas:glassesCanvas}); //oluşturulan canvas üzerinde WebGL grafik çizimi yapılacak. three.js için.
@@ -371,7 +378,6 @@
     var frontCameraCanvas = document.createElement("canvas");
 
     //BAŞLANGIÇ AYARLAMALARI
-    preview.appendChild(glassesCanvas);
     frontCameraCanvas.width = frameSizes.width;
     frontCameraCanvas.height = frameSizes.height;
     //camera.position.set( 1, 1, 1250 );
