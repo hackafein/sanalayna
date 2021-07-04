@@ -694,7 +694,7 @@
 
 
     var headerInfo = document.body.querySelector(".header-info");
-    let socket = new WebSocket("ws://localhost:8091/ws");
+    let socket = new WebSocket("wss://"+ window.location.host + window.location.pathname +"ws");
             socket.onopen = function(){
                 console.log("websocket bağlantısı başarılı.");
                 headerInfo.innerHTML="Kafanı karenin ortasında tutmaya çalış!";
